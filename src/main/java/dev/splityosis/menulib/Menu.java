@@ -1,5 +1,6 @@
 package dev.splityosis.menulib;
 
+import dev.splityosis.sysengine.utils.ColorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -554,13 +555,21 @@ public class Menu implements InventoryHolder, Cloneable {
 
     private static final Pattern HEX_PATTERN = Pattern.compile("&(#\\w{6})");
     private static String colorize(String str) {
-        Matcher matcher = HEX_PATTERN.matcher(net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', str));
-        StringBuffer buffer = new StringBuffer();
+        try {
+            return ColorUtil.colorize(str);
+        } catch (Exception e){
+            try {
+                Matcher matcher = HEX_PATTERN.matcher(net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', str));
+                StringBuffer buffer = new StringBuffer();
 
-        while (matcher.find())
-            matcher.appendReplacement(buffer, net.md_5.bungee.api.ChatColor.of(matcher.group(1)).toString());
+                while (matcher.find())
+                    matcher.appendReplacement(buffer, net.md_5.bungee.api.ChatColor.of(matcher.group(1)).toString());
 
-        return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
+                return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
+            } catch (Exception ex){
+                return ChatColor.translateAlternateColorCodes('&', str);
+            }
+        }
     }
 
     private static List<String> colorize(List<String> lst){
