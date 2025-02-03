@@ -46,7 +46,10 @@ public class MenuStaticItemsMapMapper implements AbstractMapper<MenuStaticItemsM
             String slots = arrayToString(staticMenuItem.getSlots());
             config.set(path + "." + staticMenuItem.getIdentifier() + ".slot", slots);
             itemStackConfigLogic.setInConfig(configManager, staticMenuItem.getItemStack(), config, path + "." + staticMenuItem.getIdentifier() + ".display-item");
-            actionsConfigLogic.setInConfig(configManager, staticMenuItem.getOnClick(), config, path + "." + staticMenuItem.getIdentifier() + ".on-click-actions");
+            if (staticMenuItem.getOnClick() != null)
+                actionsConfigLogic.setInConfig(configManager, staticMenuItem.getOnClick(), config, path + "." + staticMenuItem.getIdentifier() + ".on-click-actions");
+            else
+                config.createSection(path + "." + staticMenuItem.getIdentifier() + ".on-click-actions");
         });
     }
 
